@@ -1,0 +1,59 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "name": "KrakenD - API Gateway",
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "plugin": {
+    "pattern":".so",
+    "folder": "/opt/krakend/plugins/"
+  },
+  "endpoints": [
+    {
+      "endpoint": "/eicar.com.txt",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/eicar.com.txt",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "GET",
+          "host": [
+            "172.17.0.5:80"
+          ],
+          "disable_host_sanitize": false,
+          "extra_config":{
+            "plugin/req-resp-modifier":{
+              "name": [
+                "krakend-clamav-request",
+                "krakend-clamav-response"
+              ],
+              "krakend-clamav":{
+                "clamd_address":"tcp://172.17.0.3:3310",
+                "scan_metadata":true,
+                "scan_body":true,
+                "scan_form_files":true
+              }
+            }
+          }
+        }
+      ],
+      "extra_config":{
+        "plugin/req-resp-modifier":{
+          "name": [
+            "krakend-clamav-request",
+            "krakend-clamav-response"
+          ],
+          "krakend-clamav":{
+            "clamd_address":"tcp://172.17.0.3:3310",
+            "scan_metadata":true,
+            "scan_body":true,
+            "scan_form_files":true
+          }
+        }
+      }
+    }
+  ]
+}
