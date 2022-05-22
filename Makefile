@@ -3,7 +3,7 @@ quick_build_docker:
 	docker buildx build --platform linux/amd64 -f Dockerfile.quickbuild -t quickbuild .
 
 quick_build:
-	docker run --rm --name krakend-clamav-quick-build --rm -it -v "${PWD}:/app" --platform linux/amd64 -e CGO_ENABLED=1 -e GOOS=linux -e GOARCH=amd64 -w /app quickbuild sh -c "go build -buildmode=plugin -o plugins/yourplugin.so ."
+	docker run --rm --name krakend-clamav-quick-build --rm -it -v "${PWD}:/app" --platform linux/amd64 -e CGO_ENABLED=1 -e GOOS=linux -e GOARCH=amd64 -w /app quickbuild sh -c "go build -buildmode=plugin -o plugins/krakend-clamav.so ."
 
 quick_run:
 	docker run --rm --name krakend-clamav-quick-run --platform linux/amd64 -p "8080:8080" -v "${PWD}:/etc/krakend/" -v "${PWD}/plugins:/opt/krakend/plugins/" devopsfaith/krakend run -c /etc/krakend/krakend.json
